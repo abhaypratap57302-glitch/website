@@ -31,7 +31,7 @@ pipeline {
                 expression { new Date().format('d') == '25' || params.FORCE_RELEASE }
             }
             steps {
-                sh 'kubectl set image deployment/website website=$IMAGE:$BUILD_NUMBER'
+                 sh 'sed "s#IMAGE_TAG#$BUILD_NUMBER#" k8s/deployment.yaml | kubectl apply -f -'
                 sh 'kubectl rollout status deployment/website --timeout=120s'
             }
         }
